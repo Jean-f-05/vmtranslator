@@ -28,7 +28,15 @@ def writeArithmetic(command):
             asmCode.append(loadDintoM())
         
         case "eq":
-            ...    
+            asmCode.append(reduceSP())  
+            asmCode.append(popSP())  
+            asmCode.append(reduceSP())  
+            asmCode.append(subSPPointerToD())
+            asmCode.append(returnAsmCode("@TRUE\nD;JEQ\n@FALSE\nD;JNE"))
+            asmCode.append(jumpTrueFale("TRUE","1"))
+            asmCode.append(jumpTrueFale("FALSE","0"))
+            asmCode.append(end())
+
         case "gt":
             ...    
         case "lt":
@@ -79,3 +87,12 @@ def negate():
 
 def loadDintoM():
     return """M=D"""
+
+def returnAsmCode(asmString):
+    return asmString
+
+def jumpTrueFale(name, value):
+    return f"({name})\n@{value}\nD=A\nD=-D\n@SP\nA=M\nM=D\n@SP\nM=M+1\n@END\n0;JMP"
+
+def end():
+    return """(END)\n@END\n0;JMP"""
