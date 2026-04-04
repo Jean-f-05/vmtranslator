@@ -20,7 +20,6 @@ def tester(input_file):
 
         if command_type == "C_ARITHMETIC":
             asmCode = CodeWriter.writeArithmetic(words[0])
-            #TODO
             #print(asmCode) 
             asmCodeOut.extend(asmCode)
             #print("\n".join(asmCode))
