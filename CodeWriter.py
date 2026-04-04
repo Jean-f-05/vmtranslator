@@ -33,9 +33,9 @@ def writeArithmetic(command):
             asmCode.append(reduceSP())  
             asmCode.append(subSPPointerToD())
             asmCode.append(returnAsmCode("@TRUE\nD;JEQ\n@FALSE\nD;JNE"))
-            asmCode.append(jumpTrueFale("TRUE","1"))
-            asmCode.append(jumpTrueFale("FALSE","0"))
-            asmCode.append(declareEnd())
+            asmCode.append(jumpTrueFalse("TRUE","1"))
+            asmCode.append(jumpTrueFalse("FALSE","0"))
+            asmCode.append(declareContinue())
 
         case "gt": 
             asmCode.append(reduceSP())
@@ -43,9 +43,9 @@ def writeArithmetic(command):
             asmCode.append(reduceSP())
             asmCode.append(subSPPointerToD())
             asmCode.append(returnAsmCode("@TRUE\nD;JGT\n@FALSE\nD;JLE"))
-            asmCode.append(jumpTrueFale("TRUE","1"))
-            asmCode.append(jumpTrueFale("FALSE","0"))
-            asmCode.append(declareEnd())
+            asmCode.append(jumpTrueFalse("TRUE","1"))
+            asmCode.append(jumpTrueFalse("FALSE","0"))
+            asmCode.append(declareContinue())
 
         case "lt":
             asmCode.append(reduceSP())
@@ -53,9 +53,9 @@ def writeArithmetic(command):
             asmCode.append(reduceSP())
             asmCode.append(subSPPointerToD())
             asmCode.append(returnAsmCode("@TRUE\nD;JLT\n@FALSE\nD;JGE"))
-            asmCode.append(jumpTrueFale("TRUE","1"))
-            asmCode.append(jumpTrueFale("FALSE","0"))
-            asmCode.append(declareEnd())
+            asmCode.append(jumpTrueFalse("TRUE","1"))
+            asmCode.append(jumpTrueFalse("FALSE","0"))
+            asmCode.append(declareContinue())
         
         case "and":
             asmCode.append(reduceSP())
@@ -64,8 +64,9 @@ def writeArithmetic(command):
             asmCode.append(andOP())
             asmCode.append(loadDToSP())
             asmCode.append(increaseSP())
-            asmCode.append(goEnd())
-            asmCode.append(declareEnd())
+            #asmCode.append(goEnd())
+            #asmCode.append(declareEnd())
+
         case "or":
             asmCode.append(reduceSP())
             asmCode.append(popSP())
@@ -73,15 +74,16 @@ def writeArithmetic(command):
             asmCode.append(orOP())
             asmCode.append(loadDToSP())
             asmCode.append(increaseSP())
-            asmCode.append(goEnd())
-            asmCode.append(declareEnd())
+            #asmCode.append(goEnd())
+            #asmCode.append(declareEnd())
+            
         case "not":
             asmCode.append(tempReduceSP())
             asmCode.append(notOP())
             asmCode.append(tempReduceSP())
             asmCode.append(loadDintoM())
-            asmCode.append(goEnd())
-            asmCode.append(declareEnd())
+            #asmCode.append(goEnd())
+            #asmCode.append(declareEnd())
         case _:
             print("ERROR IN CASE")    
     
@@ -126,8 +128,8 @@ def loadDintoM():
 def returnAsmCode(asmString):
     return asmString
 
-def jumpTrueFale(name, value):
-    return f"({name})\n@{value}\nD=A\nD=-D\n@SP\nA=M\nM=D\n@SP\nM=M+1\n@END\n0;JMP"
+def jumpTrueFalse(name, value):
+    return f"({name})\n@{value}\nD=A\nD=-D\n@SP\nA=M\nM=D\n@SP\nM=M+1\n@CONTINUE\n0;JMP"
 
 def declareEnd():
     return """(END)\n@END\n0;JMP"""
@@ -146,3 +148,6 @@ def orOP():
 
 def notOP():
     return """D=M\nD=!D"""
+
+def declareContinue():
+    return """(CONTINUE)\n"""
