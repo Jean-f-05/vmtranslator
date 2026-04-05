@@ -21,11 +21,15 @@ def tester(input_file):
         if command_type == "C_ARITHMETIC":
             asmCode = CodeWriter.writeArithmetic(words[0])
             #print(asmCode) 
-            asmCodeOut.extend(asmCode)
+            
+            #asmCodeOut.extend(asmCode)
+            
             #print("\n".join(asmCode))
 
         elif command_type in ["C_PUSH","C_POP"]:
-            CodeWriter.writePushPop(command_type, first_argument,second_argument)
+            
+            asmCode = CodeWriter.writePushPop(command_type, first_argument,second_argument)
+            asmCodeOut.extend(asmCode)
         #print(line.strip())
         #print("\n".join(line))
         #print(CodeWriter.hello())

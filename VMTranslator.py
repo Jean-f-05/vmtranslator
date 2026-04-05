@@ -11,7 +11,7 @@ with open(in_file, "r", encoding="utf-8", newline='') as input_file:
     #inputFile = input_file.read()
     #print(inputFile)
     asmCode = Parser.tester(input_file)
-    print("HERE WE ARE!")
+    #print("HERE WE ARE!")
     print("\n".join(asmCode))
 
 

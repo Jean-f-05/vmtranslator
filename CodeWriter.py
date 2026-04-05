@@ -1,102 +1,131 @@
 def writeArithmetic(command):
-    print(f"ARITHMETIC: {command}")
+    #print(f"ARITHMETIC: {command}")
     
-    asmCode = []
+    asmCodeArithmetic = []
     
+    def append_to_asm_aritchmetic(func, *args, **kwargs):
+        result = func(*args, **kwargs)
+        asmCodeArithmetic.append(result)
+
+
     match command:
         case "add":
-            asmCode.append(reduceSP())
-            asmCode.append(popSP())
-            asmCode.append(reduceSP())
-            asmCode.append(addSPPointerToD())
-            asmCode.append(popSP())
-            asmCode.append(increaseSP())
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(popSP)
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(addSPPointerToD)
+            append_to_asm_aritchmetic(popSP)
+            append_to_asm_aritchmetic(increaseSP)
             
         case "sub":
-            asmCode.append(reduceSP())
-            asmCode.append(popSP())
-            asmCode.append(reduceSP())
-            asmCode.append(subSPPointerToD())
-            asmCode.append(popSP())
-            asmCode.append(increaseSP())
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(popSP)
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(subSPPointerToD)
+            append_to_asm_aritchmetic(popSP)
+            append_to_asm_aritchmetic(increaseSP)
 
         case "neg":
-            asmCode.append(tempReduceSP())
-            asmCode.append(loadMintoD())
-            asmCode.append(negateOP())
-            asmCode.append(tempReduceSP())
-            asmCode.append(loadDintoM())
+            append_to_asm_aritchmetic(tempReduceSP)
+            append_to_asm_aritchmetic(loadMintoD)
+            append_to_asm_aritchmetic(negateOP)
+            append_to_asm_aritchmetic(tempReduceSP)
+            append_to_asm_aritchmetic(loadDintoM)
         
         case "eq":
-            asmCode.append(reduceSP())  
-            asmCode.append(popSP())  
-            asmCode.append(reduceSP())  
-            asmCode.append(subSPPointerToD())
-            asmCode.append(returnAsmCode("@TRUE\nD;JEQ\n@FALSE\nD;JNE"))
-            asmCode.append(jumpTrueFalse("TRUE","1"))
-            asmCode.append(jumpTrueFalse("FALSE","0"))
-            asmCode.append(declareContinue())
+            append_to_asm_aritchmetic(reduceSP)  
+            append_to_asm_aritchmetic(popSP)  
+            append_to_asm_aritchmetic(reduceSP)  
+            append_to_asm_aritchmetic(subSPPointerToD)
+            append_to_asm_aritchmetic(returnAsmCode,"@TRUE\nD;JEQ\n@FALSE\nD;JNE")
+            append_to_asm_aritchmetic(jumpTrueFalse,"TRUE","1")
+            append_to_asm_aritchmetic(jumpTrueFalse,"FALSE","0")
+            append_to_asm_aritchmetic(declareContinue)
 
         case "gt": 
-            asmCode.append(reduceSP())
-            asmCode.append(popSP())
-            asmCode.append(reduceSP())
-            asmCode.append(subSPPointerToD())
-            asmCode.append(returnAsmCode("@TRUE\nD;JGT\n@FALSE\nD;JLE"))
-            asmCode.append(jumpTrueFalse("TRUE","1"))
-            asmCode.append(jumpTrueFalse("FALSE","0"))
-            asmCode.append(declareContinue())
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(popSP)
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(subSPPointerToD)
+            append_to_asm_aritchmetic(returnAsmCode, "@TRUE\nD;JGT\n@FALSE\nD;JLE")
+            append_to_asm_aritchmetic(jumpTrueFalse, "TRUE","1")
+            append_to_asm_aritchmetic(jumpTrueFalse, "FALSE","0")
+            append_to_asm_aritchmetic(declareContinue)
 
         case "lt":
-            asmCode.append(reduceSP())
-            asmCode.append(popSP())
-            asmCode.append(reduceSP())
-            asmCode.append(subSPPointerToD())
-            asmCode.append(returnAsmCode("@TRUE\nD;JLT\n@FALSE\nD;JGE"))
-            asmCode.append(jumpTrueFalse("TRUE","1"))
-            asmCode.append(jumpTrueFalse("FALSE","0"))
-            asmCode.append(declareContinue())
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(popSP)
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(subSPPointerToD)
+            append_to_asm_aritchmetic(returnAsmCode,"@TRUE\nD;JLT\n@FALSE\nD;JGE")
+            append_to_asm_aritchmetic(jumpTrueFalse,"TRUE","1")
+            append_to_asm_aritchmetic(jumpTrueFalse,"FALSE","0")
+            append_to_asm_aritchmetic(declareContinue)
         
         case "and":
-            asmCode.append(reduceSP())
-            asmCode.append(popSP())
-            asmCode.append(reduceSP())
-            asmCode.append(andOP())
-            asmCode.append(loadDToSP())
-            asmCode.append(increaseSP())
-            #asmCode.append(goEnd())
-            #asmCode.append(declareEnd())
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(popSP)
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(andOP)
+            append_to_asm_aritchmetic(loadDToSP)
+            append_to_asm_aritchmetic(increaseSP)
+            #append_to_asm_aritchmetic(goEnd)
+            #append_to_asm_aritchmetic(declareEnd)
 
         case "or":
-            asmCode.append(reduceSP())
-            asmCode.append(popSP())
-            asmCode.append(reduceSP())
-            asmCode.append(orOP())
-            asmCode.append(loadDToSP())
-            asmCode.append(increaseSP())
-            #asmCode.append(goEnd())
-            #asmCode.append(declareEnd())
-            
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(popSP)
+            append_to_asm_aritchmetic(reduceSP)
+            append_to_asm_aritchmetic(orOP)
+            append_to_asm_aritchmetic(loadDToSP)
+            append_to_asm_aritchmetic(increaseSP)
+            #append_to_asm_aritchmetic(goEnd)
+            #append_to_asm_aritchmetic(declareEnd)
+
         case "not":
-            asmCode.append(tempReduceSP())
-            asmCode.append(notOP())
-            asmCode.append(tempReduceSP())
-            asmCode.append(loadDintoM())
-            #asmCode.append(goEnd())
-            #asmCode.append(declareEnd())
+            append_to_asm_aritchmetic(tempReduceSP)
+            append_to_asm_aritchmetic(notOP)
+            append_to_asm_aritchmetic(tempReduceSP)
+            append_to_asm_aritchmetic(loadDintoM)
+            #append_to_asm_aritchmetic(goEnd)
+            #append_to_asm_aritchmetic(declareEnd)
         case _:
             print("ERROR IN CASE")    
     
          
-    return asmCode
+    return asmCodeArithmetic
 
-
-
-####################
-#AUXILIARY FUNCTIONS
 
 def writePushPop(command, segment, index):
     print(f"PUSH/POP: {command, segment, index}")
+    
+    asmCodePushPop = []
+    
+    def append_to_asm_push_pop(func, *args, **kwargs):
+        result = func(*args, **kwargs)
+        asmCodePushPop.append(result)
+
+    if command == "C_PUSH":
+        match segment:
+            case "constant":
+                append_to_asm_push_pop(getConstantToD, index)
+                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(increaseSP)
+    
+        return asmCodePushPop    
+    
+    
+    elif command == "C_POP":
+        ...
+        return asmCodePushPop    
+    
+    
+    #TODO
+    
+####################
+#AUXILIARY FUNCTIONS
+
+
     
 def reduceSP():
     return """@SP\nM=M-1"""
@@ -151,3 +180,8 @@ def notOP():
 
 def declareContinue():
     return """(CONTINUE)\n"""
+
+def getConstantToD(index):
+    return f"@{index}\nM=A\nD=M"
+
+
