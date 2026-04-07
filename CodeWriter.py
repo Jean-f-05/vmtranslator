@@ -111,16 +111,22 @@ def writePushPop(command, segment, index):
                 append_to_asm_push_pop(getConstantToD, index)
                 append_to_asm_push_pop(loadDToSP)
                 append_to_asm_push_pop(increaseSP)
-    
+            
+            case "local":
+                append_to_asm_push_pop(getConstantToD, index)
+                append_to_asm_push_pop(dPlusSegmentValue)
+                append_to_asm_push_pop(storeDinRandom)
+                append_to_asm_push_pop(popRandom)
+                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(increaseSP)
+                   
         return asmCodePushPop    
     
     
     elif command == "C_POP":
-        ...
+        ...#TODO
         return asmCodePushPop    
     
-    
-    #TODO
     
 ####################
 #AUXILIARY FUNCTIONS
@@ -182,6 +188,14 @@ def declareContinue():
     return """(CONTINUE)\n"""
 
 def getConstantToD(index):
-    return f"@{index}\nM=A\nD=M"
+    return f"@{index}\nD=A"
 
+def dPlusSegmentValue():
+    return """@LCL\nD=D+M"""
+
+def storeDinRandom():
+    return """@random\nM=D"""
+
+def popRandom():
+    return """@random\nA=M\nD=M"""
 
