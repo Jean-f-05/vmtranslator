@@ -1,1 +1,1 @@
-push local 10
+push argument 2
