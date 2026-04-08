@@ -1,6 +1,6 @@
 import CodeWriter
 
-def tester(input_file):
+def tester(input_file, file_name):
 
     asmCodeOut = []
 
@@ -28,7 +28,7 @@ def tester(input_file):
 
         elif command_type in ["C_PUSH","C_POP"]:
             
-            asmCode = CodeWriter.writePushPop(command_type, first_argument,second_argument)
+            asmCode = CodeWriter.writePushPop(command_type, first_argument,second_argument, file_name)
             asmCodeOut.extend(asmCode)
         #print(line.strip())
         #print("\n".join(line))

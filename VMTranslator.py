@@ -10,7 +10,7 @@ out_file = file_name + ".asm"
 with open(in_file, "r", encoding="utf-8", newline='') as input_file:
     #inputFile = input_file.read()
     #print(inputFile)
-    asmCode = Parser.tester(input_file)
+    asmCode = Parser.tester(input_file, file_name)
     #print("HERE WE ARE!")
     print("\n".join(asmCode))
 

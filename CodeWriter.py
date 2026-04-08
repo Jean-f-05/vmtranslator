@@ -96,8 +96,8 @@ def writeArithmetic(command):
     return asmCodeArithmetic
 
 
-def writePushPop(command, segment, index):
-    print(f"PUSH/POP: {command, segment, index}")
+def writePushPop(command, segment, index, file_name):
+    print(f"PUSH/POP: {command, segment, index, file_name}")
     
     asmCodePushPop = []
     
@@ -127,6 +127,31 @@ def writePushPop(command, segment, index):
                 append_to_asm_push_pop(popRandom)
                 append_to_asm_push_pop(loadDToSP)
                 append_to_asm_push_pop(increaseSP)
+
+            case "temp":
+                append_to_asm_push_pop(getConstantToD, 5)
+                append_to_asm_push_pop(addConstantPlusD, index)
+                append_to_asm_push_pop(storeDinRandom)
+                append_to_asm_push_pop(popRandom)
+                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(increaseSP)
+
+            case "pointer":
+                thisOrThat = "THIS" if index == "0" else "THAT"
+                
+                append_to_asm_push_pop(getConstantToD, index)
+                append_to_asm_push_pop(declarPointerSegment, thisOrThat)
+                append_to_asm_push_pop(loadMintoD)
+                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(increaseSP)
+                
+            case "static":
+                append_to_asm_push_pop(popStaticToD, file_name, index)
+                append_to_asm_push_pop(loadMintoD)
+                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(increaseSP)
+
+
 
         return asmCodePushPop    
     
@@ -207,3 +232,14 @@ def storeDinRandom():
 def popRandom():
     return """@random\nA=M\nD=M"""
 
+def addConstantPlusD(index):
+    return f"@{index}\nD=D+A"
+
+def jumpToPointers():
+    return """@POINTER_THIS\nD;JEQ\n@POINTER_THAT\nD;JNE"""
+
+def declarPointerSegment(pointer):
+    return f"@{pointer}"
+
+def popStaticToD(file_name, index):
+    return f"@{file_name}.{index}"
