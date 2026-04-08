@@ -68,9 +68,6 @@ def writeArithmetic(command):
             append_to_asm_aritchmetic(reduceSP)
             append_to_asm_aritchmetic(andOP)
             append_to_asm_aritchmetic(loadDToSP)
-            append_to_asm_aritchmetic(increaseSP)
-            #append_to_asm_aritchmetic(goEnd)
-            #append_to_asm_aritchmetic(declareEnd)
 
         case "or":
             append_to_asm_aritchmetic(reduceSP)
@@ -79,8 +76,6 @@ def writeArithmetic(command):
             append_to_asm_aritchmetic(orOP)
             append_to_asm_aritchmetic(loadDToSP)
             append_to_asm_aritchmetic(increaseSP)
-            #append_to_asm_aritchmetic(goEnd)
-            #append_to_asm_aritchmetic(declareEnd)
 
         case "not":
             append_to_asm_aritchmetic(tempReduceSP)
@@ -157,7 +152,48 @@ def writePushPop(command, segment, index, file_name):
     
     
     elif command == "C_POP":
-        ...#TODO
+        match segment:
+            case "local":
+                append_to_asm_push_pop(getConstantToD, index)
+                append_to_asm_push_pop(DPlusSegmentValue, "LCL")
+                append_to_asm_push_pop(storeDinRandom)
+                append_to_asm_push_pop(reduceSP)
+                append_to_asm_push_pop(popSP)
+                append_to_asm_push_pop(pushDToRandom)
+            
+            case "argument":
+                append_to_asm_push_pop(getConstantToD, index)
+                append_to_asm_push_pop(DPlusSegmentValue, "ARG")
+                append_to_asm_push_pop(storeDinRandom)
+                append_to_asm_push_pop(reduceSP)
+                append_to_asm_push_pop(popSP)
+                append_to_asm_push_pop(pushDToRandom)
+
+            case "temp":
+                append_to_asm_push_pop(getConstantToD, "5")
+                append_to_asm_push_pop(addConstantPlusD, index)
+                append_to_asm_push_pop(storeDinRandom)
+                append_to_asm_push_pop(reduceSP)
+                append_to_asm_push_pop(popSP)
+                append_to_asm_push_pop(pushDToRandom)
+
+            case "pointer":
+
+                thisOrThat = "THIS" if index == "0" else "THAT"
+                append_to_asm_push_pop(reduceSP)
+                append_to_asm_push_pop(getConstantToD, index)
+                append_to_asm_push_pop(declarPointerSegment, thisOrThat)
+                append_to_asm_push_pop(loadMintoD)
+                append_to_asm_push_pop(loadDToSP)
+        
+            case "static":
+
+                append_to_asm_push_pop(reduceSP)
+                append_to_asm_push_pop(popSP)
+                append_to_asm_push_pop(popStaticToD, file_name, index)
+                append_to_asm_push_pop(loadDintoM)
+
+
         return asmCodePushPop    
     
     
@@ -235,11 +271,11 @@ def popRandom():
 def addConstantPlusD(index):
     return f"@{index}\nD=D+A"
 
-def jumpToPointers():
-    return """@POINTER_THIS\nD;JEQ\n@POINTER_THAT\nD;JNE"""
-
 def declarPointerSegment(pointer):
     return f"@{pointer}"
 
 def popStaticToD(file_name, index):
     return f"@{file_name}.{index}"
+
+def pushDToRandom():
+    return """@random\nA=M\nM=D"""
