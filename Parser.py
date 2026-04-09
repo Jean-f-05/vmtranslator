@@ -3,7 +3,8 @@ import CodeWriter
 def tester(input_file, file_name):
 
     asmCodeOut = []
-
+    counter=0
+    
     for line in input_file:
         accepted_command = ["C_PUSH","C_POP", "C_FUNCTION", "C_CALL"]
         words = line.strip().split()
@@ -19,9 +20,11 @@ def tester(input_file, file_name):
         #print(second_argument)
 
         if command_type == "C_ARITHMETIC":
-            asmCode = CodeWriter.writeArithmetic(words[0])
+            (asmCode, returned_counter) = CodeWriter.writeArithmetic(words[0], counter)
+            asmCodeOut.extend(asmCode)
             #print(asmCode) 
-            
+
+            counter = returned_counter
             #asmCodeOut.extend(asmCode)
             
             #print("\n".join(asmCode))
@@ -59,4 +62,3 @@ def arg1(word):
 
 def arg2(word):
     return word[2]
-    

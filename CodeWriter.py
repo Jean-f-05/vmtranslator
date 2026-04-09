@@ -1,13 +1,20 @@
-def writeArithmetic(command):
-    #print(f"ARITHMETIC: {command}")
+def writeArithmetic(command, counter):
+    print(f"ARITHMETIC: {command}")
     
     asmCodeArithmetic = []
+    true_label = f"TRUE_{counter}"
+    false_label = f"FALSE_{counter}"
+    continue_label = f"CONTINUE_{counter}"
     
     def append_to_asm_aritchmetic(func, *args, **kwargs):
         result = func(*args, **kwargs)
         asmCodeArithmetic.append(result)
 
+    def increase_counter(counter):
+        counter += 1
+        return counter
 
+    
     match command:
         case "add":
             append_to_asm_aritchmetic(reduceSP)
@@ -37,31 +44,34 @@ def writeArithmetic(command):
             append_to_asm_aritchmetic(popSP)  
             append_to_asm_aritchmetic(reduceSP)  
             append_to_asm_aritchmetic(subSPPointerToD)
-            append_to_asm_aritchmetic(returnAsmCode,"@TRUE\nD;JEQ\n@FALSE\nD;JNE")
-            append_to_asm_aritchmetic(jumpTrueFalse,"TRUE","1")
-            append_to_asm_aritchmetic(jumpTrueFalse,"FALSE","0")
-            append_to_asm_aritchmetic(declareContinue)
+            append_to_asm_aritchmetic(returnAsmCode,f"@{true_label}\nD;JEQ\n@{false_label}\nD;JNE")
+            append_to_asm_aritchmetic(jumpTrueFalse,true_label,"1", continue_label)
+            append_to_asm_aritchmetic(jumpTrueFalse,false_label,"0", continue_label)
+            append_to_asm_aritchmetic(declareContinue, continue_label)
+            counter = increase_counter(counter)
 
         case "gt": 
             append_to_asm_aritchmetic(reduceSP)
             append_to_asm_aritchmetic(popSP)
             append_to_asm_aritchmetic(reduceSP)
             append_to_asm_aritchmetic(subSPPointerToD)
-            append_to_asm_aritchmetic(returnAsmCode, "@TRUE\nD;JGT\n@FALSE\nD;JLE")
-            append_to_asm_aritchmetic(jumpTrueFalse, "TRUE","1")
-            append_to_asm_aritchmetic(jumpTrueFalse, "FALSE","0")
-            append_to_asm_aritchmetic(declareContinue)
-
+            append_to_asm_aritchmetic(returnAsmCode, f"@{true_label}\nD;JGT\n@{false_label}\nD;JLE")
+            append_to_asm_aritchmetic(jumpTrueFalse, true_label,"1", continue_label)
+            append_to_asm_aritchmetic(jumpTrueFalse, false_label,"0", continue_label)
+            append_to_asm_aritchmetic(declareContinue, continue_label)
+            counter = increase_counter(counter)
+            
         case "lt":
             append_to_asm_aritchmetic(reduceSP)
             append_to_asm_aritchmetic(popSP)
             append_to_asm_aritchmetic(reduceSP)
             append_to_asm_aritchmetic(subSPPointerToD)
-            append_to_asm_aritchmetic(returnAsmCode,"@TRUE\nD;JLT\n@FALSE\nD;JGE")
-            append_to_asm_aritchmetic(jumpTrueFalse,"TRUE","1")
-            append_to_asm_aritchmetic(jumpTrueFalse,"FALSE","0")
-            append_to_asm_aritchmetic(declareContinue)
-        
+            append_to_asm_aritchmetic(returnAsmCode,f"@{true_label}\nD;JLT\n@{false_label}\nD;JGE")
+            append_to_asm_aritchmetic(jumpTrueFalse,true_label,"1", continue_label)
+            append_to_asm_aritchmetic(jumpTrueFalse,false_label,"0", continue_label)
+            append_to_asm_aritchmetic(declareContinue, continue_label)
+            counter = increase_counter(counter)
+            
         case "and":
             append_to_asm_aritchmetic(reduceSP)
             append_to_asm_aritchmetic(popSP)
@@ -82,13 +92,11 @@ def writeArithmetic(command):
             append_to_asm_aritchmetic(notOP)
             append_to_asm_aritchmetic(tempReduceSP)
             append_to_asm_aritchmetic(loadDintoM)
-            #append_to_asm_aritchmetic(goEnd)
-            #append_to_asm_aritchmetic(declareEnd)
+            
         case _:
             print("ERROR IN CASE")    
-    
-         
-    return asmCodeArithmetic
+                
+    return (asmCodeArithmetic, counter)
 
 
 def writePushPop(command, segment, index, file_name):
@@ -146,8 +154,6 @@ def writePushPop(command, segment, index, file_name):
                 append_to_asm_push_pop(loadDToSP)
                 append_to_asm_push_pop(increaseSP)
 
-
-
         return asmCodePushPop    
     
     
@@ -199,9 +205,6 @@ def writePushPop(command, segment, index, file_name):
     
 ####################
 #AUXILIARY FUNCTIONS
-
-
-    
 def reduceSP():
     return """@SP\nM=M-1"""
 
@@ -232,8 +235,8 @@ def loadDintoM():
 def returnAsmCode(asmString):
     return asmString
 
-def jumpTrueFalse(name, value):
-    return f"({name})\n@{value}\nD=A\nD=-D\n@SP\nA=M\nM=D\n@SP\nM=M+1\n@CONTINUE\n0;JMP"
+def jumpTrueFalse(name, value, label):
+    return f"({name})\n@{value}\nD=A\nD=-D\n@SP\nA=M\nM=D\n@SP\nM=M+1\n@{label}\n0;JMP"
 
 def declareEnd():
     return """(END)\n@END\n0;JMP"""
@@ -253,8 +256,8 @@ def orOP():
 def notOP():
     return """D=M\nD=!D"""
 
-def declareContinue():
-    return """(CONTINUE)\n"""
+def declareContinue(label):
+    return f"({label})\n"
 
 def getConstantToD(index):
     return f"@{index}\nD=A"

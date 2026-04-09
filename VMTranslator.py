@@ -16,4 +16,4 @@ with open(in_file, "r", encoding="utf-8", newline='') as input_file:
 
 
 with open(out_file, "a") as output_file:
-    output_file.write("")
+    output_file.write("\n".join(asmCode))
