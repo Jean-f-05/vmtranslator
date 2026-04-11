@@ -144,6 +144,24 @@ def writePushPop(command, segment, index, file_name):
                 append_to_asm_push_pop(loadDToSP)
                 append_to_asm_push_pop(increaseSP)
 
+            case "this":
+                asmCodePushPop.append(f"//push {segment} {index}")
+                append_to_asm_push_pop(getConstantToD, index)
+                append_to_asm_push_pop(DPlusSegmentValue, "THIS")
+                append_to_asm_push_pop(storeDinRandom)
+                append_to_asm_push_pop(popRandom)
+                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(increaseSP)
+
+            case "that":
+                asmCodePushPop.append(f"//push {segment} {index}")
+                append_to_asm_push_pop(getConstantToD, index)
+                append_to_asm_push_pop(DPlusSegmentValue, "THAT")
+                append_to_asm_push_pop(storeDinRandom)
+                append_to_asm_push_pop(popRandom)
+                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(increaseSP)
+
             case "temp":
                 asmCodePushPop.append(f"//push {segment} {index}")
                 append_to_asm_push_pop(getConstantToD, 5)
@@ -188,6 +206,24 @@ def writePushPop(command, segment, index, file_name):
                 asmCodePushPop.append(f"//pop {segment} {index}")
                 append_to_asm_push_pop(getConstantToD, index)
                 append_to_asm_push_pop(DPlusSegmentValue, "ARG")
+                append_to_asm_push_pop(storeDinRandom)
+                append_to_asm_push_pop(reduceSP)
+                append_to_asm_push_pop(popSP)
+                append_to_asm_push_pop(pushDToRandom)
+
+            case "this":
+                asmCodePushPop.append(f"//pop {segment} {index}")
+                append_to_asm_push_pop(getConstantToD, index)
+                append_to_asm_push_pop(DPlusSegmentValue, "THIS")
+                append_to_asm_push_pop(storeDinRandom)
+                append_to_asm_push_pop(reduceSP)
+                append_to_asm_push_pop(popSP)
+                append_to_asm_push_pop(pushDToRandom)
+
+            case "that":
+                asmCodePushPop.append(f"//pop {segment} {index}")
+                append_to_asm_push_pop(getConstantToD, index)
+                append_to_asm_push_pop(DPlusSegmentValue, "THAT")
                 append_to_asm_push_pop(storeDinRandom)
                 append_to_asm_push_pop(reduceSP)
                 append_to_asm_push_pop(popSP)
@@ -289,10 +325,10 @@ def DPlusSegmentValue(segment):
     return f"@{segment}\nD=D+M"
 
 def storeDinRandom():
-    return """@random\nM=D"""
+    return """@R13\nM=D"""
 
 def popRandom():
-    return """@random\nA=M\nD=M"""
+    return """@R13\nA=M\nD=M"""
 
 def addConstantPlusD(index):
     return f"@{index}\nD=D+A"
@@ -304,4 +340,4 @@ def popStaticToD(file_name, index):
     return f"@{file_name}.{index}"
 
 def pushDToRandom():
-    return """@random\nA=M\nM=D"""
+    return """@R13\nA=M\nM=D"""

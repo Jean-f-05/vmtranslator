@@ -11,14 +11,14 @@ M=M+1
 D=A
 @LCL
 D=D+M
-@random
+@R13
 M=D
 @SP
 M=M-1
 @SP
 A=M
 D=M
-@random
+@R13
 A=M
 M=D
 //push constant 21
@@ -42,14 +42,14 @@ M=M+1
 D=A
 @ARG
 D=D+M
-@random
+@R13
 M=D
 @SP
 M=M-1
 @SP
 A=M
 D=M
-@random
+@R13
 A=M
 M=D
 //pop argument 1
@@ -57,14 +57,14 @@ M=D
 D=A
 @ARG
 D=D+M
-@random
+@R13
 M=D
 @SP
 M=M-1
 @SP
 A=M
 D=M
-@random
+@R13
 A=M
 M=D
 //push constant 36
@@ -75,6 +75,21 @@ A=M
 M=D
 @SP
 M=M+1
+//pop this 6
+@6
+D=A
+@THIS
+D=D+M
+@R13
+M=D
+@SP
+M=M-1
+@SP
+A=M
+D=M
+@R13
+A=M
+M=D
 //push constant 42
 @42
 D=A
@@ -91,6 +106,36 @@ A=M
 M=D
 @SP
 M=M+1
+//pop that 5
+@5
+D=A
+@THAT
+D=D+M
+@R13
+M=D
+@SP
+M=M-1
+@SP
+A=M
+D=M
+@R13
+A=M
+M=D
+//pop that 2
+@2
+D=A
+@THAT
+D=D+M
+@R13
+M=D
+@SP
+M=M-1
+@SP
+A=M
+D=M
+@R13
+A=M
+M=D
 //push constant 510
 @510
 D=A
@@ -104,14 +149,14 @@ M=M+1
 D=A
 @6
 D=D+A
-@random
+@R13
 M=D
 @SP
 M=M-1
 @SP
 A=M
 D=M
-@random
+@R13
 A=M
 M=D
 //push local 0
@@ -119,9 +164,24 @@ M=D
 D=A
 @LCL
 D=D+M
-@random
+@R13
 M=D
-@random
+@R13
+A=M
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+//push that 5
+@5
+D=A
+@THAT
+D=D+M
+@R13
+M=D
+@R13
 A=M
 D=M
 @SP
@@ -150,9 +210,9 @@ M=M+1
 D=A
 @ARG
 D=D+M
-@random
+@R13
 M=D
-@random
+@R13
 A=M
 D=M
 @SP
@@ -171,6 +231,36 @@ M=M-1
 @SP
 A=M
 D=M-D
+@SP
+A=M
+M=D
+@SP
+M=M+1
+//push this 6
+@6
+D=A
+@THIS
+D=D+M
+@R13
+M=D
+@R13
+A=M
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+//push this 6
+@6
+D=A
+@THIS
+D=D+M
+@R13
+M=D
+@R13
+A=M
+D=M
 @SP
 A=M
 M=D
@@ -213,9 +303,9 @@ M=M+1
 D=A
 @6
 D=D+A
-@random
+@R13
 M=D
-@random
+@R13
 A=M
 D=M
 @SP
