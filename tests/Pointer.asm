@@ -77,8 +77,6 @@ D=M
 A=M
 M=D
 //push pointer 0
-@0
-D=A
 @THIS
 D=M
 @SP
@@ -87,8 +85,6 @@ M=D
 @SP
 M=M+1
 //push pointer 1
-@1
-D=A
 @THAT
 D=M
 @SP

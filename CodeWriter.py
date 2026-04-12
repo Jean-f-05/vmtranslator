@@ -175,9 +175,7 @@ def writePushPop(command, segment, index, file_name):
                 asmCodePushPop.append(f"//push {segment} {index}")
                 thisOrThat = "THIS" if index == "0" else "THAT"
                 
-                append_to_asm_push_pop(getConstantToD, index)
-                append_to_asm_push_pop(declarPointerSegment, thisOrThat)
-                append_to_asm_push_pop(loadMintoD)
+                append_to_asm_push_pop(popThisThatToD, thisOrThat)
                 append_to_asm_push_pop(loadDToSP)
                 append_to_asm_push_pop(increaseSP)
                 
@@ -244,7 +242,7 @@ def writePushPop(command, segment, index, file_name):
                 thisOrThat = "THIS" if index == "0" else "THAT"
                 append_to_asm_push_pop(reduceSP)
                 append_to_asm_push_pop(popSP)
-                append_to_asm_push_pop(popThisThat,thisOrThat)
+                append_to_asm_push_pop(popThisThatToM,thisOrThat)
         
             case "static":
                 asmCodePushPop.append(f"//pop {segment} {index}")
@@ -265,8 +263,11 @@ def reduceSP():
 def popSP():
     return """@SP\nA=M\nD=M"""
 
-def popThisThat(thisthat):
+def popThisThatToM(thisthat):
     return f"@{thisthat}\nM=D"
+
+def popThisThatToD(thisthat):
+    return f"@{thisthat}\nD=M"
 
 def addSPPointerToD():
     return """@SP\nA=M\nD=D+M"""
