@@ -171,7 +171,7 @@ def writePushPop(command, segment, index, file_name):
                 append_to_asm_push_pop(loadDToSP)
                 append_to_asm_push_pop(increaseSP)
             
-            case "pointer": #FIXME 
+            case "pointer":
                 asmCodePushPop.append(f"//push {segment} {index}")
                 thisOrThat = "THIS" if index == "0" else "THAT"
                 
