@@ -373,4 +373,4 @@ def pushDToRandom():
     return """@R13\nA=M\nM=D"""
 
 def gotoLabel(label):
-    return f"@{label}\nD;JLT"
+    return f"@{label}\nD;JNE"
