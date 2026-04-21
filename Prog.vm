@@ -6,4 +6,4 @@ push local 5
 add
 sub
 lt
-goto WHILE_LOOP
+if-goto WHILE_LOOP

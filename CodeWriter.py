@@ -269,6 +269,20 @@ def writeGoto(label):
     asmGoto.append(f"@{label}\n0;JMP")
     return asmGoto
 
+def writeIfGoto(label):
+    asmIfGoto = []
+
+    def append_to_asm_ifGoto(func, *args, **kwargs):
+        result = func(*args, **kwargs)
+        asmIfGoto.append(result)
+
+    asmIfGoto.append(f"//if-goto {label}")
+    append_to_asm_ifGoto(reduceSP)
+    append_to_asm_ifGoto(popSP)
+    append_to_asm_ifGoto(gotoLabel, label)
+
+    return asmIfGoto
+
 ####################
 #AUXILIARY FUNCTIONS
 def reduceSP():
@@ -357,3 +371,6 @@ def popStaticToD(file_name, index):
 
 def pushDToRandom():
     return """@R13\nA=M\nM=D"""
+
+def gotoLabel(label):
+    return f"@{label}\nD;JLT"

@@ -19,34 +19,30 @@ def tester(input_file, file_name):
             second_argument = arg2(words)
             #print(second_argument)
 
-        if command_type == "C_ARITHMETIC":
+        elif command_type == "C_ARITHMETIC":
             (asmCode, returned_counter) = CodeWriter.writeArithmetic(words[0], counter)
             asmCodeOut.extend(asmCode)
-            #print(asmCode) 
-
             counter = returned_counter
-            #asmCodeOut.extend(asmCode)
-            
-            #print("\n".join(asmCode))
-        if command_type == "LABEL":
-            #print("LABEL TYPE")
-            #asmCode = ["LABEL"]
-            #print("LEFIRST: ", first_argument)
-            asmCode = CodeWriter.writeLabel(words[1])
-            asmCodeOut.extend(asmCode)
-
-        if command_type == "GOTO":
-            asmCode =CodeWriter.writeGoto(words[1])
-            asmCodeOut.extend(asmCode)
 
         elif command_type in ["C_PUSH","C_POP"]:
-            
             asmCode = CodeWriter.writePushPop(command_type, first_argument,second_argument, file_name)
             asmCodeOut.extend(asmCode)
         #print(line.strip())
         #print("\n".join(line))
         #print(CodeWriter.hello())
 
+        elif command_type == "LABEL":
+            asmCode = CodeWriter.writeLabel(words[1])
+            asmCodeOut.extend(asmCode)
+
+        elif command_type == "GOTO":
+            asmCode = CodeWriter.writeGoto(words[1])
+            asmCodeOut.extend(asmCode)
+    
+        elif command_type == "IF-GOTO":
+            asmCode = CodeWriter.writeIfGoto(words[1])
+            asmCodeOut.extend(asmCode)
+    
     return asmCodeOut
 
 def commandType(command):
@@ -61,6 +57,8 @@ def commandType(command):
             return "LABEL"
         elif command[0] == "goto":
             return "GOTO"
+        elif command[0] == "if-goto":
+            return "IF-GOTO"
     
     elif len(command) == 3:
         if command[0] == "push":
