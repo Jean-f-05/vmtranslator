@@ -8,7 +8,7 @@ def tester(input_file, file_name):
     for line in input_file:
         accepted_command = ["C_PUSH","C_POP", "C_FUNCTION", "C_CALL"]
         words = line.strip().split()
-        
+        #print("WORDS", words)
         command_type = commandType(words)
         #print(command_type)
 
@@ -17,7 +17,7 @@ def tester(input_file, file_name):
         
         if command_type in accepted_command:
             second_argument = arg2(words)
-        #print(second_argument)
+            #print(second_argument)
 
         if command_type == "C_ARITHMETIC":
             (asmCode, returned_counter) = CodeWriter.writeArithmetic(words[0], counter)
@@ -28,6 +28,12 @@ def tester(input_file, file_name):
             #asmCodeOut.extend(asmCode)
             
             #print("\n".join(asmCode))
+        if command_type == "LABEL":
+            #print("LABEL TYPE")
+            #asmCode = ["LABEL"]
+            #print("LEFIRST: ", first_argument)
+            asmCode = CodeWriter.writeLabel(words[1])
+            asmCodeOut.extend(asmCode)
 
         elif command_type in ["C_PUSH","C_POP"]:
             
@@ -45,6 +51,11 @@ def commandType(command):
     
     if len(command) == 1 and command[0] in arithmetic_commands:
         return "C_ARITHMETIC"
+    
+    elif len(command) ==2:
+        if command[0] == "label":
+            return "LABEL"
+    
     elif len(command) == 3:
         if command[0] == "push":
             return "C_PUSH"

@@ -253,8 +253,18 @@ def writePushPop(command, segment, index, file_name):
 
 
         return asmCodePushPop    
-    
-    
+
+def writeLabel(command):
+    asmLabel = []
+
+    label = f"({command.upper()})"
+    asmLabel.append(f"//label {command}")
+    asmLabel.append(label)
+
+    return asmLabel
+
+
+
 ####################
 #AUXILIARY FUNCTIONS
 def reduceSP():

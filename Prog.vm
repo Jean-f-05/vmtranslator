@@ -1,0 +1,4 @@
+add
+sub
+label WHILE_LOOP
+push local 5
