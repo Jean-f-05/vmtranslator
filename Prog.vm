@@ -1,4 +1,9 @@
 add
+lt
 sub
 label WHILE_LOOP
 push local 5
+add
+sub
+lt
+goto WHILE_LOOP

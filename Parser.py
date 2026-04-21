@@ -35,6 +35,10 @@ def tester(input_file, file_name):
             asmCode = CodeWriter.writeLabel(words[1])
             asmCodeOut.extend(asmCode)
 
+        if command_type == "GOTO":
+            asmCode =CodeWriter.writeGoto(words[1])
+            asmCodeOut.extend(asmCode)
+
         elif command_type in ["C_PUSH","C_POP"]:
             
             asmCode = CodeWriter.writePushPop(command_type, first_argument,second_argument, file_name)
@@ -55,6 +59,8 @@ def commandType(command):
     elif len(command) ==2:
         if command[0] == "label":
             return "LABEL"
+        elif command[0] == "goto":
+            return "GOTO"
     
     elif len(command) == 3:
         if command[0] == "push":

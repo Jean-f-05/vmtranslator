@@ -263,7 +263,11 @@ def writeLabel(command):
 
     return asmLabel
 
-
+def writeGoto(label):
+    asmGoto = []
+    asmGoto.append(f"//goto {label}")
+    asmGoto.append(f"@{label}\n0;JMP")
+    return asmGoto
 
 ####################
 #AUXILIARY FUNCTIONS
@@ -328,7 +332,7 @@ def notOP():
     return """D=M\nD=!D"""
 
 def declareContinue(label):
-    return f"({label})\n"
+    return f"({label})"
 
 def getConstantToD(index):
     return f"@{index}\nD=A"
