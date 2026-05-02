@@ -1,3 +1,9 @@
+def increase_counter(counter):
+    counter += 1
+    print("INC_COUNTER", counter)
+    return counter
+    
+
 def writeArithmetic(command, counter):
     print(f"ARITHMETIC: {command}")
     
@@ -9,11 +15,6 @@ def writeArithmetic(command, counter):
     def append_to_asm_aritchmetic(func, *args, **kwargs):
         result = func(*args, **kwargs)
         asmCodeArithmetic.append(result)
-
-    def increase_counter(counter):
-        counter += 1
-        return counter
-
     
     match command:
         case "add":
@@ -286,26 +287,15 @@ def writeIfGoto(label):
 
 def writeCall(funcName, argNum, counter):
     asmCallFunc = []
-    #print(funcName, argNum)
-    
 
-    def increase_counter(counter):
-        counter += 1
-        print("INC_COUNTER", counter)
-        return counter
-    
     def append_to_asm_callFunc(func, *args, **kwargs):
         result = func(*args, **kwargs)
         asmCallFunc.append(result)
         
-
-
     asmCallFunc.append(f"//call {funcName} {argNum}")
     counter = increase_counter(counter)
     append_to_asm_callFunc(generateLabel, funcName, counter)
-    print("CONT:",counter)
     
-    print("BAM: ",counter)
     return (asmCallFunc, counter)
 
 ####################
@@ -401,5 +391,4 @@ def gotoLabel(label):
     return f"@{label}\nD;JNE"
 
 def generateLabel(functionName, counter):
-    label = f"@{functionName}$ret.{counter}"
-    return label
+    return f"@{functionName}$ret.{counter}"
