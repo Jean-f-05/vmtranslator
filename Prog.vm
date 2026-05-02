@@ -1,9 +1,5 @@
+call Bar.mult 2
+push local 1
+call Bar.mult 3
+call Bar.mult 4
 add
-lt
-sub
-label WHILE_LOOP
-push local 5
-add
-sub
-lt
-if-goto WHILE_LOOP

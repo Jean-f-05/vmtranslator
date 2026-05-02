@@ -3,7 +3,8 @@ import CodeWriter
 def tester(input_file, file_name):
 
     asmCodeOut = []
-    counter=0
+    counter_arithmetic = 0
+    counter_call = 0
     
     for line in input_file:
         accepted_command = ["C_PUSH","C_POP", "C_FUNCTION", "C_CALL"]
@@ -19,30 +20,35 @@ def tester(input_file, file_name):
             second_argument = arg2(words)
             #print(second_argument)
 
-        elif command_type == "C_ARITHMETIC":
-            (asmCode, returned_counter) = CodeWriter.writeArithmetic(words[0], counter)
+        if command_type == "C_ARITHMETIC":
+            (asmCode, returned_counter) = CodeWriter.writeArithmetic(words[0], counter_arithmetic)
             asmCodeOut.extend(asmCode)
             counter = returned_counter
 
-        elif command_type in ["C_PUSH","C_POP"]:
+        if command_type in ["C_PUSH","C_POP"]:
             asmCode = CodeWriter.writePushPop(command_type, first_argument,second_argument, file_name)
             asmCodeOut.extend(asmCode)
         #print(line.strip())
         #print("\n".join(line))
         #print(CodeWriter.hello())
 
-        elif command_type == "LABEL":
+        if command_type == "LABEL":
             asmCode = CodeWriter.writeLabel(words[1])
             asmCodeOut.extend(asmCode)
 
-        elif command_type == "GOTO":
+        if command_type == "GOTO":
             asmCode = CodeWriter.writeGoto(words[1])
             asmCodeOut.extend(asmCode)
     
-        elif command_type == "IF-GOTO":
+        if command_type == "IF-GOTO":
             asmCode = CodeWriter.writeIfGoto(words[1])
             asmCodeOut.extend(asmCode)
-    
+
+        if command_type == "C_CALL":
+            (asmCode, returned_call_counter) = CodeWriter.writeCall(first_argument,second_argument, counter_call)
+            asmCodeOut.extend(asmCode)
+            counter_call = returned_call_counter
+
     return asmCodeOut
 
 def commandType(command):
@@ -65,6 +71,8 @@ def commandType(command):
             return "C_PUSH"
         elif command[0] == "pop":
             return "C_POP"
+        elif command[0] == "call":
+            return "C_CALL"
     #else: 
     #    print("NONE")
 

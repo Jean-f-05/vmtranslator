@@ -283,6 +283,31 @@ def writeIfGoto(label):
 
     return asmIfGoto
 
+
+def writeCall(funcName, argNum, counter):
+    asmCallFunc = []
+    #print(funcName, argNum)
+    
+
+    def increase_counter(counter):
+        counter += 1
+        print("INC_COUNTER", counter)
+        return counter
+    
+    def append_to_asm_callFunc(func, *args, **kwargs):
+        result = func(*args, **kwargs)
+        asmCallFunc.append(result)
+        
+
+
+    asmCallFunc.append(f"//call {funcName} {argNum}")
+    counter = increase_counter(counter)
+    append_to_asm_callFunc(generateLabel, funcName, counter)
+    print("CONT:",counter)
+    
+    print("BAM: ",counter)
+    return (asmCallFunc, counter)
+
 ####################
 #AUXILIARY FUNCTIONS
 def reduceSP():
@@ -374,3 +399,7 @@ def pushDToRandom():
 
 def gotoLabel(label):
     return f"@{label}\nD;JNE"
+
+def generateLabel(functionName, counter):
+    label = f"@{functionName}$ret.{counter}"
+    return label
