@@ -295,7 +295,22 @@ def writeCall(funcName, argNum, counter):
     asmCallFunc.append(f"//call {funcName} {argNum}")
     counter = increase_counter(counter)
     append_to_asm_callFunc(generateLabel, funcName, counter)
-    
+    append_to_asm_callFunc(assignAtoD)
+    append_to_asm_callFunc(loadDToSP)
+    append_to_asm_callFunc(increaseSP)
+    append_to_asm_callFunc(storeIndexInSP, "LCL")
+    append_to_asm_callFunc(storeIndexInSP, "ARG")
+    append_to_asm_callFunc(storeIndexInSP, "THIS")
+    append_to_asm_callFunc(storeIndexInSP, "THAT")
+    append_to_asm_callFunc(getConstantToD, "SP")
+    append_to_asm_callFunc(subtractXfromD, "5")
+    append_to_asm_callFunc(subtractXfromD, argNum)
+    append_to_asm_callFunc(pushDtoIndex, "ARG")
+    append_to_asm_callFunc(loadSPToD)
+    append_to_asm_callFunc(pushDtoIndex, "LCL")
+    append_to_asm_callFunc(gotoFunction, funcName)
+
+
     return (asmCallFunc, counter)
 
 ####################
@@ -392,3 +407,21 @@ def gotoLabel(label):
 
 def generateLabel(functionName, counter):
     return f"@{functionName}$ret.{counter}"
+
+def assignAtoD():
+    return "D=A"
+
+def storeIndexInSP(index):
+    return f"@{index}\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1"
+
+def subtractXfromD(value):
+    return f"@{value}\nD=D-A"
+
+def pushDtoIndex(index):
+    return f"@{index}\nM=D"
+
+def loadSPToD():
+    return "@SP\nA=M\nD=A"
+
+def gotoFunction(label):
+    return f"@{label}\n0;JMP"

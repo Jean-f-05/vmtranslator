@@ -2,4 +2,3 @@ call Bar.mult 2
 push local 1
 call Bar.mult 3
 call Bar.mult 4
-add
