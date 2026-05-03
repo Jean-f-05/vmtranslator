@@ -23,7 +23,7 @@ def writeArithmetic(command, counter):
             append_to_asm_aritchmetic(popSP)
             append_to_asm_aritchmetic(reduceSP)
             append_to_asm_aritchmetic(addSPPointerToD)
-            append_to_asm_aritchmetic(loadDToSP)
+            append_to_asm_aritchmetic(loadDToPointer, "SP")
             append_to_asm_aritchmetic(increaseSP)
             
         case "sub":
@@ -32,7 +32,7 @@ def writeArithmetic(command, counter):
             append_to_asm_aritchmetic(popSP)
             append_to_asm_aritchmetic(reduceSP)
             append_to_asm_aritchmetic(subSPPointerToD)
-            append_to_asm_aritchmetic(loadDToSP)
+            append_to_asm_aritchmetic(loadDToPointer, "SP")
             append_to_asm_aritchmetic(increaseSP)
 
         case "neg":
@@ -85,7 +85,7 @@ def writeArithmetic(command, counter):
             append_to_asm_aritchmetic(popSP)
             append_to_asm_aritchmetic(reduceSP)
             append_to_asm_aritchmetic(andOP)
-            append_to_asm_aritchmetic(loadDToSP)
+            append_to_asm_aritchmetic(loadDToPointer, "SP")
             append_to_asm_aritchmetic(increaseSP)
 
         case "or":
@@ -94,7 +94,7 @@ def writeArithmetic(command, counter):
             append_to_asm_aritchmetic(popSP)
             append_to_asm_aritchmetic(reduceSP)
             append_to_asm_aritchmetic(orOP)
-            append_to_asm_aritchmetic(loadDToSP)
+            append_to_asm_aritchmetic(loadDToPointer, "SP")
             append_to_asm_aritchmetic(increaseSP)
 
         case "not":
@@ -124,7 +124,7 @@ def writePushPop(command, segment, index, file_name):
             case "constant":
                 asmCodePushPop.append(f"//push {segment} {index}")
                 append_to_asm_push_pop(getConstantToD, index)
-                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(loadDToPointer, "SP")
                 append_to_asm_push_pop(increaseSP)
             
             case "local":
@@ -133,7 +133,7 @@ def writePushPop(command, segment, index, file_name):
                 append_to_asm_push_pop(DPlusSegmentValue, "LCL")
                 append_to_asm_push_pop(storeDinRandom)
                 append_to_asm_push_pop(popRandom)
-                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(loadDToPointer, "SP")
                 append_to_asm_push_pop(increaseSP)
             
             case "argument":
@@ -142,7 +142,7 @@ def writePushPop(command, segment, index, file_name):
                 append_to_asm_push_pop(DPlusSegmentValue, "ARG")
                 append_to_asm_push_pop(storeDinRandom)
                 append_to_asm_push_pop(popRandom)
-                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(loadDToPointer, "SP")
                 append_to_asm_push_pop(increaseSP)
 
             case "this":
@@ -151,7 +151,7 @@ def writePushPop(command, segment, index, file_name):
                 append_to_asm_push_pop(DPlusSegmentValue, "THIS")
                 append_to_asm_push_pop(storeDinRandom)
                 append_to_asm_push_pop(popRandom)
-                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(loadDToPointer, "SP")
                 append_to_asm_push_pop(increaseSP)
 
             case "that":
@@ -160,7 +160,7 @@ def writePushPop(command, segment, index, file_name):
                 append_to_asm_push_pop(DPlusSegmentValue, "THAT")
                 append_to_asm_push_pop(storeDinRandom)
                 append_to_asm_push_pop(popRandom)
-                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(loadDToPointer, "SP")
                 append_to_asm_push_pop(increaseSP)
 
             case "temp":
@@ -169,7 +169,7 @@ def writePushPop(command, segment, index, file_name):
                 append_to_asm_push_pop(addConstantPlusD, index)
                 append_to_asm_push_pop(storeDinRandom)
                 append_to_asm_push_pop(popRandom)
-                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(loadDToPointer, "SP")
                 append_to_asm_push_pop(increaseSP)
             
             case "pointer":
@@ -177,14 +177,14 @@ def writePushPop(command, segment, index, file_name):
                 thisOrThat = "THIS" if index == "0" else "THAT"
                 
                 append_to_asm_push_pop(popThisThatToD, thisOrThat)
-                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(loadDToPointer, "SP")
                 append_to_asm_push_pop(increaseSP)
                 
             case "static":
                 asmCodePushPop.append(f"//push {segment} {index}")
                 append_to_asm_push_pop(popStaticToD, file_name, index)
                 append_to_asm_push_pop(loadMintoD)
-                append_to_asm_push_pop(loadDToSP)
+                append_to_asm_push_pop(loadDToPointer, "SP")
                 append_to_asm_push_pop(increaseSP)
 
         return asmCodePushPop    
@@ -296,7 +296,7 @@ def writeCall(funcName, argNum, counter):
     counter = increase_counter(counter)
     append_to_asm_callFunc(generateLabel, funcName, counter)
     append_to_asm_callFunc(assignAtoD)
-    append_to_asm_callFunc(loadDToSP)
+    append_to_asm_callFunc(loadDToPointer, "SP")
     append_to_asm_callFunc(increaseSP)
     append_to_asm_callFunc(storeIndexInSP, "LCL")
     append_to_asm_callFunc(storeIndexInSP, "ARG")
@@ -306,12 +306,86 @@ def writeCall(funcName, argNum, counter):
     append_to_asm_callFunc(subtractXfromD, "5")
     append_to_asm_callFunc(subtractXfromD, argNum)
     append_to_asm_callFunc(pushDtoIndex, "ARG")
-    append_to_asm_callFunc(loadSPToD)
+    append_to_asm_callFunc(loadAddressToD, "SP")
     append_to_asm_callFunc(pushDtoIndex, "LCL")
     append_to_asm_callFunc(gotoFunction, funcName)
 
 
     return (asmCallFunc, counter)
+
+
+def writeFunction(funcName, argNum):
+    #print(funcName, argNum)
+    asmFunc = []
+
+    def append_to_asm_Func(func, *args, **kwargs):
+        result = func(*args, **kwargs)
+        asmFunc.append(result)
+        
+    asmFunc.append(f"// function {funcName} {argNum}")       
+    append_to_asm_Func(declareContinue, funcName)
+    for arg in range(int(argNum)):
+        append_to_asm_Func(getConstantToD, 0)
+        append_to_asm_Func(loadDToPointer, "SP")
+        append_to_asm_Func(increaseSP)
+
+    return asmFunc
+
+
+def writeReturn():
+    asmReturn = []
+
+    def append_to_asm_Return(func, *args, **kwargs):
+        result = func(*args, **kwargs)
+        asmReturn.append(result)
+
+    asmReturn.append("// return")
+    append_to_asm_Return(readIndex, "LCL")
+    append_to_asm_Return(pushDtoIndex, "R13")
+    #append_to_asm_Return(loadAddressToD, "R13")
+    append_to_asm_Return(subtractXfromD, "5")
+    append_to_asm_Return(subtractValueToD)
+
+    append_to_asm_Return(pushDtoIndex, "R14")
+    append_to_asm_Return(reduceSP)
+    append_to_asm_Return(popSP)
+
+
+    append_to_asm_Return(loadDToPointer, "ARG")
+    append_to_asm_Return(pushIndexPlusOnetoD, "ARG")
+    
+    append_to_asm_Return(pushDtoIndex, "SP")
+    append_to_asm_Return(readIndex, "R13")
+    append_to_asm_Return(subtractXfromD, "1")
+    append_to_asm_Return(subtractValueToD)
+
+
+    append_to_asm_Return(pushDtoIndex, "THAT")
+    append_to_asm_Return(readIndex, "R13")
+    append_to_asm_Return(subtractXfromD, "2")
+    append_to_asm_Return(subtractValueToD)
+
+    
+    append_to_asm_Return(pushDtoIndex, "THIS")
+    append_to_asm_Return(readIndex, "R13")
+    append_to_asm_Return(subtractXfromD, "3")
+    append_to_asm_Return(subtractValueToD)
+    
+    append_to_asm_Return(pushDtoIndex, "ARG")
+    append_to_asm_Return(readIndex, "R13")
+    append_to_asm_Return(subtractXfromD, "4")
+    append_to_asm_Return(subtractValueToD)
+
+    append_to_asm_Return(pushDtoIndex, "LCL")
+    append_to_asm_Return(jumpToTempAddress)
+
+    
+
+    
+
+
+    
+    return asmReturn
 
 ####################
 #AUXILIARY FUNCTIONS
@@ -363,8 +437,8 @@ def declareEnd():
 def andOP():
     return """@SP\nA=M\nD=D&M"""
 
-def loadDToSP():
-    return """@SP\nA=M\nM=D"""
+def loadDToPointer(index):
+    return f"@{index}\nA=M\nM=D"
 
 def goEnd():
     return """@END\n0;JMP"""
@@ -420,8 +494,20 @@ def subtractXfromD(value):
 def pushDtoIndex(index):
     return f"@{index}\nM=D"
 
-def loadSPToD():
-    return "@SP\nA=M\nD=A"
+def loadAddressToD(index):
+    return f"@{index}\nA=M\nD=A"
 
 def gotoFunction(label):
     return f"@{label}\n0;JMP"
+
+def subtractValueToD():
+    return "A=D\nD=M"
+
+def pushIndexPlusOnetoD(label):
+    return f"@{label}\nD=M+1"
+
+def jumpToTempAddress():
+    return "@R14\nA=M\n0;JMP"
+
+def readIndex(index):
+    return f"@{index}\nD=M"

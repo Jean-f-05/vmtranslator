@@ -23,10 +23,10 @@ def tester(input_file, file_name):
         if command_type == "C_ARITHMETIC":
             (asmCode, returned_counter) = CodeWriter.writeArithmetic(words[0], counter_arithmetic)
             asmCodeOut.extend(asmCode)
-            counter = returned_counter
+            counter_arithmetic = returned_counter
 
         if command_type in ["C_PUSH","C_POP"]:
-            asmCode = CodeWriter.writePushPop(command_type, first_argument,second_argument, file_name)
+            asmCode = CodeWriter.writePushPop(command_type, first_argument, second_argument, file_name)
             asmCodeOut.extend(asmCode)
         #print(line.strip())
         #print("\n".join(line))
@@ -49,6 +49,14 @@ def tester(input_file, file_name):
             asmCodeOut.extend(asmCode)
             counter_call = returned_call_counter
 
+        if command_type == "C_FUNCTION":
+            asmCode = CodeWriter.writeFunction(first_argument, second_argument )
+            asmCodeOut.extend(asmCode)
+
+        if command_type == "RETURN":
+            asmCode = CodeWriter.writeReturn()
+            asmCodeOut.extend(asmCode)
+
     return asmCodeOut
 
 def commandType(command):
@@ -58,6 +66,9 @@ def commandType(command):
     if len(command) == 1 and command[0] in arithmetic_commands:
         return "C_ARITHMETIC"
     
+    elif len(command) == 1 and command[0] == "return":
+        return "RETURN"
+
     elif len(command) ==2:
         if command[0] == "label":
             return "LABEL"
@@ -73,6 +84,8 @@ def commandType(command):
             return "C_POP"
         elif command[0] == "call":
             return "C_CALL"
+        elif command[0] == "function":
+            return "C_FUNCTION"
     #else: 
     #    print("NONE")
 
