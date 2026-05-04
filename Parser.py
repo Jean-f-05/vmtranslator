@@ -6,6 +6,9 @@ def tester(input_file, file_name):
     counter_arithmetic = 0
     counter_call = 0
     
+    asmCode = CodeWriter.writeBoot()
+    asmCodeOut.extend(asmCode)
+
     for line in input_file:
         accepted_command = ["C_PUSH","C_POP", "C_FUNCTION", "C_CALL"]
         words = line.strip().split()
@@ -76,7 +79,9 @@ def commandType(command):
             return "GOTO"
         elif command[0] == "if-goto":
             return "IF-GOTO"
-    
+        elif command[0] == "call":
+            return "C_CALL"
+
     elif len(command) == 3:
         if command[0] == "push":
             return "C_PUSH"

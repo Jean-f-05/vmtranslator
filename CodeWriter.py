@@ -302,11 +302,11 @@ def writeCall(funcName, argNum, counter):
     append_to_asm_callFunc(storeIndexInSP, "ARG")
     append_to_asm_callFunc(storeIndexInSP, "THIS")
     append_to_asm_callFunc(storeIndexInSP, "THAT")
-    append_to_asm_callFunc(getConstantToD, "SP")
+    append_to_asm_callFunc(readIndex, "SP")
     append_to_asm_callFunc(subtractXfromD, "5")
     append_to_asm_callFunc(subtractXfromD, argNum)
     append_to_asm_callFunc(pushDtoIndex, "ARG")
-    append_to_asm_callFunc(loadAddressToD, "SP")
+    append_to_asm_callFunc(readIndex, "SP")
     append_to_asm_callFunc(pushDtoIndex, "LCL")
     append_to_asm_callFunc(gotoFunction, funcName)
 
@@ -378,14 +378,38 @@ def writeReturn():
 
     append_to_asm_Return(pushDtoIndex, "LCL")
     append_to_asm_Return(jumpToTempAddress)
-
-    
-
-    
-
-
     
     return asmReturn
+
+
+def writeBoot():
+    asmBoot = []
+
+    def append_to_asm_Boot(func, *args, **kwargs):
+        result = func(*args, **kwargs)
+        asmBoot.append(result)
+
+    asmBoot.append("//set SP = 256")
+    append_to_asm_Boot(getConstantToD, "256")
+    append_to_asm_Boot(pushDtoIndex, "SP")
+    asmBoot.append("//call Sys.init")
+    append_to_asm_Boot(generateLabel, "Sys.init", "1")
+    append_to_asm_Boot(assignAtoD)
+    append_to_asm_Boot(loadDToPointer, "SP")
+    append_to_asm_Boot(increaseSP)
+    append_to_asm_Boot(storeIndexInSP, "LCL")
+    append_to_asm_Boot(storeIndexInSP, "ARG")
+    append_to_asm_Boot(storeIndexInSP, "THIS")
+    append_to_asm_Boot(storeIndexInSP, "THAT")
+    append_to_asm_Boot(readIndex, "SP")
+    append_to_asm_Boot(subtractXfromD, "5")
+    append_to_asm_Boot(pushDtoIndex, "ARG")
+    append_to_asm_Boot(readIndex, "SP")
+    append_to_asm_Boot(pushDtoIndex, "LCL")
+    append_to_asm_Boot(gotoFunction, "Sys.init")
+
+    return asmBoot
+
 
 ####################
 #AUXILIARY FUNCTIONS
