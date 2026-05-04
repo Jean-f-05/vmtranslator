@@ -308,7 +308,7 @@ def writeCall(funcName, argNum, counter):
     append_to_asm_callFunc(pushDtoIndex, "ARG")
     append_to_asm_callFunc(readIndex, "SP")
     append_to_asm_callFunc(pushDtoIndex, "LCL")
-    append_to_asm_callFunc(gotoFunction, funcName)
+    append_to_asm_callFunc(gotoFunction, funcName, counter)
 
 
     return (asmCallFunc, counter)
@@ -393,7 +393,7 @@ def writeBoot():
     append_to_asm_Boot(getConstantToD, "256")
     append_to_asm_Boot(pushDtoIndex, "SP")
     asmBoot.append("//call Sys.init")
-    append_to_asm_Boot(generateLabel, "Sys.init", "1")
+    append_to_asm_Boot(generateLabel, "Sys.init", "0")
     append_to_asm_Boot(assignAtoD)
     append_to_asm_Boot(loadDToPointer, "SP")
     append_to_asm_Boot(increaseSP)
@@ -406,7 +406,7 @@ def writeBoot():
     append_to_asm_Boot(pushDtoIndex, "ARG")
     append_to_asm_Boot(readIndex, "SP")
     append_to_asm_Boot(pushDtoIndex, "LCL")
-    append_to_asm_Boot(gotoFunction, "Sys.init")
+    append_to_asm_Boot(gotoFunction, "Sys.init", "0")
 
     return asmBoot
 
@@ -521,8 +521,8 @@ def pushDtoIndex(index):
 def loadAddressToD(index):
     return f"@{index}\nA=M\nD=A"
 
-def gotoFunction(label):
-    return f"@{label}\n0;JMP"
+def gotoFunction(label, counter):
+    return f"@{label}\n0;JMP\n({label}$ret.{counter})"
 
 def subtractValueToD():
     return "A=D\nD=M"

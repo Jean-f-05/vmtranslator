@@ -11,6 +11,7 @@ def tester(input_file, file_name):
 
     for line in input_file:
         accepted_command = ["C_PUSH","C_POP", "C_FUNCTION", "C_CALL"]
+        line = line.split("//")[0]
         words = line.strip().split()
         #print("WORDS", words)
         command_type = commandType(words)
@@ -48,7 +49,7 @@ def tester(input_file, file_name):
             asmCodeOut.extend(asmCode)
 
         if command_type == "C_CALL":
-            (asmCode, returned_call_counter) = CodeWriter.writeCall(first_argument,second_argument, counter_call)
+            (asmCode, returned_call_counter) = CodeWriter.writeCall(first_argument, second_argument, counter_call)
             asmCodeOut.extend(asmCode)
             counter_call = returned_call_counter
 
