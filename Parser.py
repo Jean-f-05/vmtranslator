@@ -1,6 +1,6 @@
 import CodeWriter
 
-def tester(input_file, file_name):
+def tester(input_file, file_name, class_name):
 
     asmCodeOut = []
     counter_arithmetic = 0
@@ -30,7 +30,7 @@ def tester(input_file, file_name):
             counter_arithmetic = returned_counter
 
         if command_type in ["C_PUSH","C_POP"]:
-            asmCode = CodeWriter.writePushPop(command_type, first_argument, second_argument, file_name)
+            asmCode = CodeWriter.writePushPop(command_type, first_argument, second_argument, file_name, class_name)
             asmCodeOut.extend(asmCode)
         #print(line.strip())
         #print("\n".join(line))

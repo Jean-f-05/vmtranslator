@@ -110,7 +110,7 @@ def writeArithmetic(command, counter):
     return (asmCodeArithmetic, counter)
 
 
-def writePushPop(command, segment, index, file_name):
+def writePushPop(command, segment, index, file_name, class_name):
     print(f"PUSH/POP: {command, segment, index, file_name}")
     
     asmCodePushPop = []
@@ -182,9 +182,10 @@ def writePushPop(command, segment, index, file_name):
                 
             case "static":
                 asmCodePushPop.append(f"//push {segment} {index}")
-                append_to_asm_push_pop(popStaticToD, file_name, index)
+                append_to_asm_push_pop(popStaticToD, class_name, index)
                 append_to_asm_push_pop(loadMintoD)
                 append_to_asm_push_pop(loadDToPointer, "SP")
+                print(f"PUSH: {command}, {segment}, {index}, {file_name} {class_name}")
                 append_to_asm_push_pop(increaseSP)
 
         return asmCodePushPop    
@@ -249,7 +250,8 @@ def writePushPop(command, segment, index, file_name):
                 asmCodePushPop.append(f"//pop {segment} {index}")
                 append_to_asm_push_pop(reduceSP)
                 append_to_asm_push_pop(popSP)
-                append_to_asm_push_pop(popStaticToD, file_name, index)
+                append_to_asm_push_pop(popStaticToD, class_name, index)
+                print(f"POP: {command}, {segment}, {index}, {file_name} {class_name}")
                 append_to_asm_push_pop(loadDintoM)
 
 
