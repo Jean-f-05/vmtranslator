@@ -5,7 +5,7 @@ def increase_counter(counter):
     
 
 def writeArithmetic(command, counter):
-    print(f"ARITHMETIC: {command}")
+    #print(f"ARITHMETIC: {command}")
     
     asmCodeArithmetic = []
     true_label = f"TRUE_{counter}"
@@ -111,7 +111,7 @@ def writeArithmetic(command, counter):
 
 
 def writePushPop(command, segment, index, file_name, class_name):
-    print(f"PUSH/POP: {command, segment, index, file_name}")
+    #print(f"PUSH/POP: {command, segment, index, file_name}")
     
     asmCodePushPop = []
     
@@ -185,7 +185,6 @@ def writePushPop(command, segment, index, file_name, class_name):
                 append_to_asm_push_pop(popStaticToD, class_name, index)
                 append_to_asm_push_pop(loadMintoD)
                 append_to_asm_push_pop(loadDToPointer, "SP")
-                print(f"PUSH: {command}, {segment}, {index}, {file_name} {class_name}")
                 append_to_asm_push_pop(increaseSP)
 
         return asmCodePushPop    
@@ -251,7 +250,6 @@ def writePushPop(command, segment, index, file_name, class_name):
                 append_to_asm_push_pop(reduceSP)
                 append_to_asm_push_pop(popSP)
                 append_to_asm_push_pop(popStaticToD, class_name, index)
-                print(f"POP: {command}, {segment}, {index}, {file_name} {class_name}")
                 append_to_asm_push_pop(loadDintoM)
 
 
@@ -296,6 +294,7 @@ def writeCall(funcName, argNum, counter):
         
     asmCallFunc.append(f"//call {funcName} {argNum}")
     counter = increase_counter(counter)
+    print(f"COUNTER: {counter}, FUNC_NAME: {funcName}, ARG_NUM:  {argNum}")
     append_to_asm_callFunc(generateLabel, funcName, counter)
     append_to_asm_callFunc(assignAtoD)
     append_to_asm_callFunc(loadDToPointer, "SP")
@@ -384,7 +383,7 @@ def writeReturn():
     return asmReturn
 
 
-def writeBoot():
+def writeBoot(counter):
     asmBoot = []
 
     def append_to_asm_Boot(func, *args, **kwargs):
@@ -392,10 +391,14 @@ def writeBoot():
         asmBoot.append(result)
 
     asmBoot.append("//set SP = 256")
+    print("Counter boot1: ", counter)
+
+    counter = increase_counter(counter)
+    print("Counter boot2: ", counter)
     append_to_asm_Boot(getConstantToD, "256")
     append_to_asm_Boot(pushDtoIndex, "SP")
     asmBoot.append("//call Sys.init")
-    append_to_asm_Boot(generateLabel, "Sys.init", "0")
+    append_to_asm_Boot(generateLabel, "Sys.init", counter)
     append_to_asm_Boot(assignAtoD)
     append_to_asm_Boot(loadDToPointer, "SP")
     append_to_asm_Boot(increaseSP)
@@ -408,9 +411,10 @@ def writeBoot():
     append_to_asm_Boot(pushDtoIndex, "ARG")
     append_to_asm_Boot(readIndex, "SP")
     append_to_asm_Boot(pushDtoIndex, "LCL")
-    append_to_asm_Boot(gotoFunction, "Sys.init", "0")
+    append_to_asm_Boot(gotoFunction, "Sys.init", counter)
+    
 
-    return asmBoot
+    return (asmBoot, counter)
 
 
 ####################
@@ -533,7 +537,7 @@ def pushIndexPlusOnetoD(label):
     return f"@{label}\nD=M+1"
 
 def jumpToTempAddress():
-    return "@R14\nA=M\n0;JMP"
+    return "@R14\nA=M\n0;JMP\n"
 
 def readIndex(index):
     return f"@{index}\nD=M"

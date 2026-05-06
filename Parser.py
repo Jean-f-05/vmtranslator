@@ -1,28 +1,24 @@
 import CodeWriter
 
-def tester(input_file, file_name, class_name):
+def tester(input_file, file_name, class_name, counter_arithmetic, counter_call): #FIXME classname isn't used when translating single file
 
     asmCodeOut = []
-    counter_arithmetic = 0
-    counter_call = 0
     
-    asmCode = CodeWriter.writeBoot()
-    asmCodeOut.extend(asmCode)
-
+    if counter_arithmetic == 0 and counter_call == 0:
+        (asmCode, returned_call_counter) = CodeWriter.writeBoot(counter_call)
+        asmCodeOut.extend(asmCode)
+        counter_call = returned_call_counter
+    
     for line in input_file:
         accepted_command = ["C_PUSH","C_POP", "C_FUNCTION", "C_CALL"]
         line = line.split("//")[0]
         words = line.strip().split()
-        #print("WORDS", words)
         command_type = commandType(words)
-        #print(command_type)
 
         first_argument = arg1(words)
-        #print(first_argument)
         
         if command_type in accepted_command:
             second_argument = arg2(words)
-            #print(second_argument)
 
         if command_type == "C_ARITHMETIC":
             (asmCode, returned_counter) = CodeWriter.writeArithmetic(words[0], counter_arithmetic)
@@ -32,9 +28,6 @@ def tester(input_file, file_name, class_name):
         if command_type in ["C_PUSH","C_POP"]:
             asmCode = CodeWriter.writePushPop(command_type, first_argument, second_argument, file_name, class_name)
             asmCodeOut.extend(asmCode)
-        #print(line.strip())
-        #print("\n".join(line))
-        #print(CodeWriter.hello())
 
         if command_type == "LABEL":
             asmCode = CodeWriter.writeLabel(words[1])
@@ -61,7 +54,7 @@ def tester(input_file, file_name, class_name):
             asmCode = CodeWriter.writeReturn()
             asmCodeOut.extend(asmCode)
 
-    return asmCodeOut
+    return asmCodeOut, counter_arithmetic, counter_call
 
 def commandType(command):
     
@@ -92,8 +85,6 @@ def commandType(command):
             return "C_CALL"
         elif command[0] == "function":
             return "C_FUNCTION"
-    #else: 
-    #    print("NONE")
 
 def arg1(word):
     if len(word) == 1:
