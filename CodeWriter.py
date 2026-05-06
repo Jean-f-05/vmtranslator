@@ -5,7 +5,6 @@ def increase_counter(counter):
     
 
 def writeArithmetic(command, counter):
-    #print(f"ARITHMETIC: {command}")
     
     asmCodeArithmetic = []
     true_label = f"TRUE_{counter}"
@@ -111,7 +110,6 @@ def writeArithmetic(command, counter):
 
 
 def writePushPop(command, segment, index, file_name, class_name):
-    #print(f"PUSH/POP: {command, segment, index, file_name}")
     
     asmCodePushPop = []
     
@@ -316,7 +314,6 @@ def writeCall(funcName, argNum, counter):
 
 
 def writeFunction(funcName, argNum):
-    #print(funcName, argNum)
     asmFunc = []
 
     def append_to_asm_Func(func, *args, **kwargs):
@@ -343,7 +340,6 @@ def writeReturn():
     asmReturn.append("// return")
     append_to_asm_Return(readIndex, "LCL")
     append_to_asm_Return(pushDtoIndex, "R13")
-    #append_to_asm_Return(loadAddressToD, "R13")
     append_to_asm_Return(subtractXfromD, "5")
     append_to_asm_Return(subtractValueToD)
 
